@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerLens Dashboard</title>
+    <meta name="description" content="CareerLens Dashboard - Interactive career prediction visualization, skill gap analysis, and personalized learning path.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                Career<span class="logo-badge">Lens</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="careers.html" class="nav-link">Careers</a></li>
+                <li><a href="analyzer.html" class="nav-link">Skill Analyzer</a></li>
+                <li><a href="resume.html" class="nav-link">Resume Intelligence</a></li>
+                <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+                <li><a href="model-performance.html" class="nav-link">ML Performance</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Container -->
+    <main class="main-content">
+        
+        <!-- Empty State Container (Shown if no analysis in memory) -->
+        <div id="dashboard-empty-state" class="card" style="display: none; text-align: center; padding: 4rem 2rem;">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem;">📊</div>
+            <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--dark); margin-bottom: 0.75rem;">No Career Analysis Found</h2>
+            <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 2rem auto;">
+                You haven't run a career analysis yet. Select your skills manually or upload your resume to generate your custom CareerLens dashboard.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="analyzer.html" class="btn btn-primary">Analyze Skills</a>
+                <a href="resume.html" class="btn btn-secondary">Upload Resume (PDF)</a>
+            </div>
+        </div>
+
+        <!-- Active Dashboard Content -->
+        <div id="dashboard-content" style="display: none;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 class="section-title" style="margin-bottom: 0.25rem;">CareerLens Dashboard</h1>
+                    <p id="analysis-source-label" class="section-subtitle" style="margin-bottom: 0;">Analysis generated via CareerLens ML Model</p>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="analyzer.html" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">⚡ New Skill Check</a>
+                    <a href="resume.html" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">📄 Upload PDF Resume</a>
+                </div>
+            </div>
+
+            <!-- Top Stat Cards (4 Cards) -->
+            <div class="stat-grid">
+                <div class="stat-card" style="border-left: 4px solid var(--primary);">
+                    <div class="stat-label">Predicted Career</div>
+                    <div id="stat-predicted-career" class="stat-value" style="font-size: 1.6rem; color: var(--primary);">Data Analyst</div>
+                    <div class="stat-desc">Target Job Role</div>
+                </div>
+
+                <div class="stat-card" style="border-left: 4px solid var(--accent);">
+                    <div class="stat-label">ML Prediction Confidence</div>
+                    <div id="stat-ml-confidence" class="stat-value" style="color: var(--accent);">84%</div>
+                    <div class="stat-desc">Model Classification Certainty</div>
+                </div>
+
+                <div class="stat-card" style="border-left: 4px solid var(--secondary);">
+                    <div class="stat-label">Skill Match Score</div>
+                    <div id="stat-skill-match" class="stat-value" style="color: var(--secondary);">72%</div>
+                    <div class="stat-desc">Role Requirement Coverage</div>
+                </div>
+
+                <div class="stat-card" style="border-left: 4px solid var(--priority-low);">
+                    <div class="stat-label">Skills Detected</div>
+                    <div id="stat-skills-count" class="stat-value" style="color: var(--priority-low);">8</div>
+                    <div class="stat-desc">Verified Active Footprint</div>
+                </div>
+            </div>
+
+            <!-- Explicit Metric Distinction Callout -->
+            <div class="explanation-callout">
+                <strong style="display: block; font-size: 1rem; margin-bottom: 0.25rem;">📌 Understanding Your Metrics:</strong>
+                <strong>ML Prediction Confidence</strong> reflects the trained machine learning model's statistical probability output (`predict_proba()`) classifying your overall skill set into a specific career bucket.<br>
+                <strong>Skill Match Score</strong> is calculated independently by comparing your matched skills against the target career's weighted requirement schema.
+            </div>
+
+            <!-- Charts Section (3 Interactive Charts) -->
+            <div class="charts-grid">
+                <!-- Chart 1: Career Probabilities (Bar Chart) -->
+                <div class="chart-card">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">
+                        📊 CareerLens Career Prediction
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="chart-probabilities"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Skill Coverage (Doughnut Chart) -->
+                <div class="chart-card">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">
+                        🍩 Skill Coverage (Present vs Missing)
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="chart-coverage"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 3: Skill Category Distribution (Bar Chart) -->
+                <div class="chart-card">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">
+                        📈 Skill Category Breakdown
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="chart-categories"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matched vs Missing Skills Analysis Row -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+                
+                <!-- Strong Skills Card -->
+                <div class="card">
+                    <h3 style="font-size: 1.2rem; font-weight: 700; color: #065f46; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>✓</span> Strong Skills You Have
+                    </h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                        Verified skills matching required role capabilities:
+                    </p>
+                    <div id="matched-skills-container" class="skill-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Missing Skills Priority Card -->
+                <div class="card">
+                    <h3 style="font-size: 1.2rem; font-weight: 700; color: #991b1b; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>⚠️</span> CareerLens Skill Gap Analysis
+                    </h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                        Identified skill gaps categorized by priority:
+                    </p>
+                    <div id="missing-skills-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended Learning Path Timeline Section -->
+            <div class="card" style="margin-bottom: 3rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <h2 class="section-title" style="margin-bottom: 0.25rem;">🎯 Personalized Learning Path</h2>
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">
+                            Sequential learning roadmap ordered by prerequisite skill dependencies.
+                        </p>
+                    </div>
+                    <span id="learning-steps-count" class="skill-tag" style="background: var(--primary-light); color: var(--primary); font-weight: 700;">
+                        0 Learning Steps
+                    </span>
+                </div>
+
+                <div id="learning-path-container" class="learning-path-timeline">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 CareerLens — Discover Your Career Fit. Build Your Future.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+career,skill,category,importance,prerequisite
+Data Analyst,Python,Programming,5,
+Data Analyst,SQL,Database,5,
+Data Analyst,Excel,Analytics,4,
+Data Analyst,Statistics,Mathematics,5,
+Data Analyst,Pandas,Programming,4,Python
+Data Analyst,NumPy,Programming,3,Python
+Data Analyst,Data Visualization,Analytics,5,Statistics
+Data Analyst,Power BI,Visualization,5,Data Visualization
+Data Analyst,Tableau,Visualization,4,Data Visualization
+Data Analyst,Data Modeling,Database,4,SQL
+Data Analyst,ETL,Data Engineering,3,SQL
+Data Analyst,Git,Tools,2,
+AI/ML Engineer,Python,Programming,5,
+AI/ML Engineer,NumPy,Programming,4,Python
+AI/ML Engineer,Pandas,Programming,4,Python
+AI/ML Engineer,Statistics,Mathematics,5,
+AI/ML Engineer,Machine Learning,AI,5,Python
+AI/ML Engineer,Scikit-learn,AI,5,Machine Learning
+AI/ML Engineer,TensorFlow,AI,4,Machine Learning
+AI/ML Engineer,PyTorch,AI,4,Machine Learning
+AI/ML Engineer,Deep Learning,AI,5,Machine Learning
+AI/ML Engineer,SQL,Database,3,
+AI/ML Engineer,Git,Tools,3,
+Web Developer,HTML,Web Development,5,
+Web Developer,CSS,Web Development,5,HTML
+Web Developer,JavaScript,Programming,5,HTML
+Web Developer,Git,Tools,4,
+Web Developer,Responsive Design,Web Development,4,CSS
+Web Developer,REST API,Backend,3,JavaScript
+Web Developer,React,Frontend,4,JavaScript
+Cybersecurity Analyst,Networking,Security,5,
+Cybersecurity Analyst,Linux,Operating Systems,5,
+Cybersecurity Analyst,Python,Programming,4,
+Cybersecurity Analyst,Cybersecurity,Security,5,
+Cybersecurity Analyst,Network Security,Security,5,Networking
+Cybersecurity Analyst,SIEM,Security,4,Cybersecurity
+Cybersecurity Analyst,Git,Tools,2,
+Business Analyst,Excel,Analytics,5,
+Business Analyst,SQL,Database,4,
+Business Analyst,Statistics,Mathematics,4,
+Business Analyst,Power BI,Visualization,5,
+Business Analyst,Data Visualization,Analytics,4,
+Business Analyst,Requirements Analysis,Business,5,
+Business Analyst,Communication,Soft Skills,5,
+Business Analyst,Problem Solving,Soft Skills,4,

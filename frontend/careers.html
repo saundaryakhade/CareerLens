@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Profiles - CareerLens</title>
+    <meta name="description" content="Explore tech career profiles and skill requirements on CareerLens.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                Career<span class="logo-badge">Lens</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="careers.html" class="nav-link active">Careers</a></li>
+                <li><a href="analyzer.html" class="nav-link">Skill Analyzer</a></li>
+                <li><a href="resume.html" class="nav-link">Resume Intelligence</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="model-performance.html" class="nav-link">ML Performance</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="section-header">
+            <h1 class="section-title">Supported Career Track Profiles</h1>
+            <p class="section-subtitle">Explore key technical skills and requirements for each machine-learning classified career path on CareerLens.</p>
+        </div>
+
+        <div id="careers-grid" class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+            <!-- Rendered dynamically or static fallback -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 CareerLens — Discover Your Career Fit. Build Your Future.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            showLoader("Loading career profiles...");
+            try {
+                const res = await fetch(`${API_BASE}/careers`);
+                const data = await res.json();
+                hideLoader();
+
+                if (data.status === "success" && data.careers) {
+                    renderCareers(data.careers);
+                } else {
+                    renderFallbackCareers();
+                }
+            } catch (err) {
+                console.error("Error fetching careers:", err);
+                hideLoader();
+                renderFallbackCareers();
+            }
+        });
+
+        function renderCareers(careers) {
+            const container = document.getElementById("careers-grid");
+            const descriptions = {
+                "Data Analyst": "Interprets data, constructs dashboards, performs statistical analysis, and generates business intelligence reports.",
+                "AI/ML Engineer": "Designs machine learning models, builds deep neural networks, and develops AI pipelines using Python and ML frameworks.",
+                "Web Developer": "Builds modern responsive web applications, frontend user interfaces, and backend REST API integrations.",
+                "Cybersecurity Analyst": "Protects IT networks, monitors security operations, analyzes SIEM logs, and manages network security defense.",
+                "Business Analyst": "Bridges business goals and technical systems, gathers requirements specs, and analyzes operational metrics."
+            };
+
+            const icons = {
+                "Data Analyst": "📊",
+                "AI/ML Engineer": "🧠",
+                "Web Developer": "💻",
+                "Cybersecurity Analyst": "🛡️",
+                "Business Analyst": "📈"
+            };
+
+            container.innerHTML = careers.map(c => `
+                <div class="card feature-card">
+                    <div class="feature-icon">${icons[c.name] || '💼'}</div>
+                    <h3 class="feature-title">${c.name}</h3>
+                    <p class="feature-desc" style="margin-bottom: 1rem;">${descriptions[c.name] || 'High-demand technology career track.'}</p>
+                    <div style="margin-bottom: 1.25rem;">
+                        <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Required Skills (${c.required_skills_count})</span>
+                        <div class="skill-list" style="margin-top: 0.4rem;">
+                            ${(c.core_skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('')}
+                        </div>
+                    </div>
+                    <a href="analyzer.html?target=${encodeURIComponent(c.name)}" class="btn btn-primary" style="width: 100%; font-size: 0.9rem;">
+                        Analyze Skills For ${c.name}
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function renderFallbackCareers() {
+            renderCareers([
+                { name: "Data Analyst", required_skills_count: 12, core_skills: ["Python", "SQL", "Excel", "Statistics", "Power BI"] },
+                { name: "AI/ML Engineer", required_skills_count: 11, core_skills: ["Python", "Machine Learning", "Deep Learning", "TensorFlow", "PyTorch"] },
+                { name: "Web Developer", required_skills_count: 7, core_skills: ["HTML", "CSS", "JavaScript", "React", "REST API"] },
+                { name: "Cybersecurity Analyst", required_skills_count: 7, core_skills: ["Networking", "Linux", "Cybersecurity", "Network Security", "SIEM"] },
+                { name: "Business Analyst", required_skills_count: 8, core_skills: ["Excel", "SQL", "Requirements Analysis", "Power BI", "Communication"] }
+            ]);
+        }
+    </script>
+</body>
+</html>
